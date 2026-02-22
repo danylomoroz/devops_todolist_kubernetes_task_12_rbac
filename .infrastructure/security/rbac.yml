@@ -1,0 +1,31 @@
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+ name: secrets-listener
+ namespace: todoapp
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+ namespace: todoapp # This is the namespace where the role will be created
+ name: secrets-listener-role # This is the name of the role
+rules:
+- apiGroups: [""] # "" indicates the core API group, which includes all core APIs
+  resources: ["secrets"] # Indicates the resources that the role can access, in this case, secrets
+  verbs: ["list", "get"] # Indicates the actions that the role can perform on the resources
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+ name: secrets-listener-binding # This is the name of the role binding
+ namespace: todoapp # This is the namespace where the role binding will be created
+subjects:
+- kind: ServiceAccount # Indicates that the subject is a service account
+  name: secrets-listener # This is the name of the service account
+roleRef:
+  kind: Role # Indicates the kind of the role that the role binding will reference
+  name: secrets-listener-role # This is the name of the role
+  apiGroup: rbac.authorization.k8s.io

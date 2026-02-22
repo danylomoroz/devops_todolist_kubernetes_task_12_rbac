@@ -41,9 +41,7 @@ TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
 CACERT=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
 
 # Perform the curl request to the internal Kubernetes API
-curl --cacert $CACERT \
-     --header "Authorization: Bearer $TOKEN" \
-     -X GET [https://kubernetes.default.svc/api/v1/namespaces/todoapp/secrets](https://kubernetes.default.svc/api/v1/namespaces/todoapp/secrets)
+curl --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt --header "Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" -X GET https://kubernetes.default.svc/api/v1/namespaces/todoapp/secrets
 ```
 Expected Result: A JSON response starting with "kind": "SecretList"
 
